@@ -7,6 +7,7 @@ type (
 		Price  float64
 	}
 	Category struct {
-		Name string
+		CategoryId int
+		Name       string
 	}
 )

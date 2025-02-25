@@ -1,3 +1,13 @@
+definitions:
+  models.Food:
+    properties:
+      foodId:
+        type: integer
+      name:
+        type: string
+      price:
+        type: number
+    type: object
 info:
   contact: {}
 paths:
@@ -16,6 +26,48 @@ paths:
               type: string
             type: object
       summary: Lấy danh sách món ăn
+      tags:
+      - foods
+    post:
+      consumes:
+      - application/json
+      description: Tạo món ăn mới
+      parameters:
+      - description: Tạo món ăn thành công
+        in: body
+        name: food
+        required: true
+        schema:
+          $ref: '#/definitions/models.Food'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+      summary: Tạo mới món ăn
+      tags:
+      - foods
+  /api/v1/foods/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Trả về thông tin món ăn theo id
+      parameters:
+      - description: ID của món ăn
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+      summary: Lấy thông tin món ăn theo id
       tags:
       - foods
 swagger: "2.0"

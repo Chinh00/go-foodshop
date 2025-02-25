@@ -27,7 +27,7 @@ func NewApplication(configs *configs.Config) error {
 	echo := echo.New()
 
 	i := 1
-	repository := database.NewInMemoryDB[models.Food]([]*models.Food{
+	repository := database.NewInMemoryDB([]*models.Food{
 		{
 			FoodId: i,
 			Name:   "Food 1",

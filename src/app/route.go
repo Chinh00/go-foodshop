@@ -4,7 +4,9 @@ import (
 	"github.com/labstack/echo/v4"
 	echoSwagger "github.com/swaggo/echo-swagger"
 	_ "go-foodshop/docs"
+	"go-foodshop/src/models"
 	usecase2 "go-foodshop/src/usecase"
+	"strconv"
 )
 
 // @title FoodShop API
@@ -33,6 +35,9 @@ func (controller *controller) MapFoodApiV1(e *echo.Echo) {
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
 	api := e.Group("/api/v1")
 	api.GET("/foods", controller.HandleGetFoods)
+	api.GET("/foods/:id", controller.HandleGetFoodById)
+	api.POST("/foods", controller.HandleCreateFood)
+
 }
 
 // HandleGetFoods godoc
@@ -49,4 +54,44 @@ func (controller *controller) HandleGetFoods(context echo.Context) error {
 		return err
 	}
 	return context.JSON(200, data)
+}
+
+// HandleGetFoodById godoc
+// @Summary Lấy thông tin món ăn theo id
+// @Description Trả về thông tin món ăn theo id
+// @Tags foods
+// @Accept json
+// @Param id path int true "ID của món ăn"
+// @Produce json
+// @Success 200 {object} int
+// @Router /api/v1/foods/{id} [get]
+func (controller *controller) HandleGetFoodById(context echo.Context) error {
+	id, err := strconv.Atoi(context.Param("id"))
+	if err != nil {
+		return err
+	}
+	data, err := controller.usecase.GetFoodById(context, id)
+	if err != nil {
+		return err
+	}
+	return context.JSON(200, data)
+}
+
+// HandleCreateFood godoc
+// @Summary Tạo mới món ăn
+// @Description Tạo món ăn mới
+// @Tags foods
+// @Accept json
+// @Param food body models.Food true "Tạo món ăn thành công"
+// @Produce json
+// @Success 200 {object} int
+// @Router /api/v1/foods [post]
+func (controller *controller) HandleCreateFood(context echo.Context) error {
+	food := &models.Food{}
+	context.Bind(food)
+	food, err := controller.usecase.AddFood(context, food)
+	if err != nil {
+		return err
+	}
+	return context.JSON(200, food)
 }

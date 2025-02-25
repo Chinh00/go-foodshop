@@ -28,6 +28,86 @@
                         }
                     }
                 }
+            },
+            "post": {
+                "description": "Tạo món ăn mới",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "foods"
+                ],
+                "summary": "Tạo mới món ăn",
+                "parameters": [
+                    {
+                        "description": "Tạo món ăn thành công",
+                        "name": "food",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Food"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/foods/{id}": {
+            "get": {
+                "description": "Trả về thông tin món ăn theo id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "foods"
+                ],
+                "summary": "Lấy thông tin món ăn theo id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID của món ăn",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.Food": {
+            "type": "object",
+            "properties": {
+                "foodId": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                }
             }
         }
     }

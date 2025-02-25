@@ -26,7 +26,17 @@ func (s *services) GetFoodsShop(context echo.Context) ([]*models.Food, error) {
 	return data, nil
 }
 
-func (s services) GetFoodById(context echo.Context, id string) (*models.Food, error) {
-	//TODO implement me
-	panic("implement me")
+func (s *services) GetFoodById(context echo.Context, id int) (*models.Food, error) {
+	data, err := s.repository.GetEntityById(context, id)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+func (s *services) AddFood(context echo.Context, food *models.Food) (*models.Food, error) {
+	data, err := s.repository.AddEntity(context, food)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
 }
