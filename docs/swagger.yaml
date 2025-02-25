@@ -1,0 +1,21 @@
+info:
+  contact: {}
+paths:
+  /api/v1/foods:
+    get:
+      consumes:
+      - application/json
+      description: Trả về danh sách các món ăn
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Lấy danh sách món ăn
+      tags:
+      - foods
+swagger: "2.0"
