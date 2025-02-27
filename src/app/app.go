@@ -13,42 +13,22 @@ type App struct {
 	config     *configs.Config
 	repository database.Repository[models.Food]
 	usecase    usecase2.Usecase
+	echo       *echo.Echo
+	controller *Controller
 }
 
-func NewApp(repository database.Repository[models.Food], usecase usecase2.Usecase, config *configs.Config) *App {
+func (a *App) StartApplication() error {
+	a.controller.MapFoodApiV1(a.echo)
+	a.echo.Start(fmt.Sprintf("%s:%d", a.config.HTTP.Host, a.config.HTTP.Port))
+	return nil
+}
+
+func NewApp(repository database.Repository[models.Food], usecase usecase2.Usecase, config *configs.Config, echo *echo.Echo, controller *Controller) *App {
 	return &App{
 		repository: repository,
 		usecase:    usecase,
 		config:     config,
+		echo:       echo,
+		controller: controller,
 	}
-}
-
-func NewApplication(configs *configs.Config) error {
-	echo := echo.New()
-
-	i := 1
-	repository := database.NewInMemoryDB([]*models.Food{
-		{
-			FoodId: i,
-			Name:   "Food 1",
-			Price:  1.0,
-		},
-		{
-			FoodId: i + 1,
-			Name:   "Food 2",
-			Price:  1.0,
-		},
-		{
-			FoodId: i + 2,
-			Name:   "Food 3",
-			Price:  1.0,
-		},
-	})
-
-	usecase := usecase2.New(repository)
-	NewController(usecase).MapFoodApiV1(echo)
-	app := NewApp(repository, usecase, configs)
-
-	echo.Start(fmt.Sprintf("%s:%d", app.config.Host, app.config.Port))
-	return nil
 }

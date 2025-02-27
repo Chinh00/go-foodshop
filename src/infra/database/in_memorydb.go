@@ -1,7 +1,6 @@
 package database
 
 import (
-	"fmt"
 	"github.com/labstack/echo/v4"
 	"go-foodshop/src/models"
 	"net/http"
@@ -41,10 +40,7 @@ func (receiver *in_memorydb) GetEntityById(context echo.Context, id int) (*model
 func (receiver *in_memorydb) AddEntity(context echo.Context, entity *models.Food) (*models.Food, error) {
 	items_size := len(receiver.items)
 	entity.FoodId = items_size + 1
-	err := append(receiver.items, entity)
-	if err != nil {
-		fmt.Println(err)
-	}
+	receiver.items = append(receiver.items, entity)
 	return entity, nil
 }
 

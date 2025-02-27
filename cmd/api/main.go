@@ -13,7 +13,11 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	err = app2.NewApplication(config)
+	app, err := app2.InitApp(config)
+	if err != nil {
+		panic(err)
+	}
+	err = app.StartApplication()
 	if err != nil {
 		panic(err)
 	}

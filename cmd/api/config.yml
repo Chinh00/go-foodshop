@@ -9,3 +9,10 @@ http:
 logger:
   log_level: 'debug'
   rollbar_env: 'product-service'
+
+postgres:
+  host: 'localhost'
+  port: 5432
+  username: 'postgres'
+  password: 'admin'
+  database: 'postgres'

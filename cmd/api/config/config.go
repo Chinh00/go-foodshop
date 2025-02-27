@@ -2,15 +2,17 @@ package config
 
 import (
 	"github.com/ilyakaznacheev/cleanenv"
+	"go-foodshop/src/infra/database/postgres"
 	configs "go-foodshop/src/pkg/config"
 	"os"
 )
 
 type (
 	Config struct {
-		configs.App  `yaml:"app"`
-		configs.HTTP `yaml:"http"`
-		configs.Log  `yaml:"logger"`
+		configs.App             `yaml:"app"`
+		configs.HTTP            `yaml:"http"`
+		configs.Log             `yaml:"logger"`
+		postgres.PostgresConfig `yaml:"postgres"`
 	}
 )
 

@@ -6,6 +6,7 @@ import (
 	_ "go-foodshop/docs"
 	"go-foodshop/src/models"
 	usecase2 "go-foodshop/src/usecase"
+	"log/slog"
 	"strconv"
 )
 
@@ -15,12 +16,12 @@ import (
 // @host localhost:8080
 // @BasePath /api/v1
 
-type controller struct {
+type Controller struct {
 	usecase usecase2.Usecase
 }
 
-func NewController(usecase usecase2.Usecase) *controller {
-	return &controller{
+func NewController(usecase usecase2.Usecase) *Controller {
+	return &Controller{
 		usecase: usecase,
 	}
 }
@@ -31,7 +32,7 @@ func NewController(usecase usecase2.Usecase) *controller {
 // @host localhost:8080
 // @BasePath /api/v1
 
-func (controller *controller) MapFoodApiV1(e *echo.Echo) {
+func (controller *Controller) MapFoodApiV1(e *echo.Echo) {
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
 	api := e.Group("/api/v1")
 	api.GET("/foods", controller.HandleGetFoods)
@@ -48,7 +49,8 @@ func (controller *controller) MapFoodApiV1(e *echo.Echo) {
 // @Produce json
 // @Success 200 {object} map[string]string
 // @Router /api/v1/foods [get]
-func (controller *controller) HandleGetFoods(context echo.Context) error {
+func (controller *Controller) HandleGetFoods(context echo.Context) error {
+	slog.Info("Request start", "http_method", "HandleGetFoods", "url", context.Request().RequestURI)
 	data, err := controller.usecase.GetFoodsShop(context)
 	if err != nil {
 		return err
@@ -65,7 +67,7 @@ func (controller *controller) HandleGetFoods(context echo.Context) error {
 // @Produce json
 // @Success 200 {object} int
 // @Router /api/v1/foods/{id} [get]
-func (controller *controller) HandleGetFoodById(context echo.Context) error {
+func (controller *Controller) HandleGetFoodById(context echo.Context) error {
 	id, err := strconv.Atoi(context.Param("id"))
 	if err != nil {
 		return err
@@ -86,7 +88,7 @@ func (controller *controller) HandleGetFoodById(context echo.Context) error {
 // @Produce json
 // @Success 200 {object} int
 // @Router /api/v1/foods [post]
-func (controller *controller) HandleCreateFood(context echo.Context) error {
+func (controller *Controller) HandleCreateFood(context echo.Context) error {
 	food := &models.Food{}
 	context.Bind(food)
 	food, err := controller.usecase.AddFood(context, food)
