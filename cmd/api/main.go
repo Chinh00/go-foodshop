@@ -12,6 +12,7 @@ import (
 
 func main() {
 	_, err := maxprocs.Set()
+
 	if err != nil {
 		slog.Error("failed set max procs", err)
 	}
@@ -24,6 +25,10 @@ func main() {
 	logrus.SetFormatter(&logrus.JSONFormatter{})
 	logrus.SetOutput(os.Stdout)
 	app, err := app2.InitApp(config)
+	//consumer := consumer.NewConsumer()
+	//go func() {
+	//	consumer.StartConsumer()
+	//}()
 	if err != nil {
 		panic(err)
 	}

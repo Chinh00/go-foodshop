@@ -8,6 +8,8 @@ import (
 	"go-foodshop/src/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
+	"time"
 )
 
 var RepositorySet = wire.NewSet(NewPgRepository[models.Food])
@@ -49,10 +51,21 @@ func (pg *pgRepository[T]) GetEntityById(context echo.Context, id int) (*T, erro
 
 func NewPgRepository[T any](config *PostgresConfig) (database.Repository[T], error) {
 	conn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=Asia/Shanghai", config.Host, config.Username, config.Password, config.Database, config.Port)
-	db, err := gorm.Open(postgres.Open(conn))
+	db, err := gorm.Open(postgres.Open(conn), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Silent),
+	})
 	if err != nil {
 		return nil, err
 	}
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+
+	sqlDB.SetMaxOpenConns(50)
+	sqlDB.SetMaxIdleConns(50)
+	sqlDB.SetConnMaxLifetime(30 * time.Minute)
+
 	db.AutoMigrate(&models.Food{}, &models.Category{})
 	return &pgRepository[T]{
 		db: db,

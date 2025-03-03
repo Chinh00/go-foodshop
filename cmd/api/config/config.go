@@ -20,7 +20,7 @@ func NewConfig() (*Config, error) {
 	config := &Config{}
 
 	dir, err := os.Getwd()
-	err = cleanenv.ReadConfig(dir+"/cmd/api/config.yml", config)
+	err = cleanenv.ReadConfig(dir+"/config.yml", config)
 	if err != nil {
 		return nil, err
 	}
