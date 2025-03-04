@@ -1,17 +1,20 @@
+basePath: /api/v1
 definitions:
-  models.Food:
+  domain.Product:
     properties:
-      foodId:
-        type: integer
       name:
         type: string
       price:
         type: number
     type: object
+host: localhost:8081
 info:
   contact: {}
+  description: API tài liệu cho FoodShop
+  title: FoodShop API
+  version: "1.0"
 paths:
-  /api/v1/foods:
+  /foods:
     get:
       consumes:
       - application/json
@@ -38,7 +41,7 @@ paths:
         name: food
         required: true
         schema:
-          $ref: '#/definitions/models.Food'
+          $ref: '#/definitions/domain.Product'
       produces:
       - application/json
       responses:
@@ -49,7 +52,7 @@ paths:
       summary: Tạo mới món ăn
       tags:
       - foods
-  /api/v1/foods/{id}:
+  /foods/{id}:
     get:
       consumes:
       - application/json

@@ -5,7 +5,7 @@ go 1.23.0
 toolchain go1.23.6
 
 require (
-	github.com/confluentinc/confluent-kafka-go/v2 v2.8.0
+	github.com/docker/distribution v2.8.3+incompatible
 	github.com/google/wire v0.6.0
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/labstack/echo/v4 v4.13.3

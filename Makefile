@@ -2,8 +2,8 @@
 run: run-product
 
 run-product:
-	cd cmd/api && go mod tidy && go mod download && \
-	CGO_ENABLED=0 go run main.go
+	cd cmd/product && go mod tidy && go mod download && \
+	air
 .PHONY: run-product
 
 

@@ -3,24 +3,18 @@ package app
 import (
 	"github.com/labstack/echo/v4"
 	echoSwagger "github.com/swaggo/echo-swagger"
-	_ "go-foodshop/docs"
-	"go-foodshop/src/models"
-	usecase2 "go-foodshop/src/usecase"
+	_ "go-foodshop/cmd/product/docs"
+	"go-foodshop/src/product/domain"
+	"go-foodshop/src/product/usecase"
 	"log/slog"
 	"strconv"
 )
 
-// @title FoodShop API
-// @version 1.0
-// @description API tài liệu cho FoodShop
-// @host localhost:8080
-// @BasePath /api/v1
-
 type Controller struct {
-	usecase usecase2.Usecase
+	usecase usecase.Usecase
 }
 
-func NewController(usecase usecase2.Usecase) *Controller {
+func NewController(usecase usecase.Usecase) *Controller {
 	return &Controller{
 		usecase: usecase,
 	}
@@ -29,7 +23,7 @@ func NewController(usecase usecase2.Usecase) *Controller {
 // @title FoodShop API
 // @version 1.0
 // @description API tài liệu cho FoodShop
-// @host localhost:8080
+// @host localhost:8081
 // @BasePath /api/v1
 
 func (controller *Controller) MapFoodApiV1(e *echo.Echo) {
@@ -48,7 +42,7 @@ func (controller *Controller) MapFoodApiV1(e *echo.Echo) {
 // @Accept json
 // @Produce json
 // @Success 200 {object} map[string]string
-// @Router /api/v1/foods [get]
+// @Router /foods [get]
 func (controller *Controller) HandleGetFoods(context echo.Context) error {
 	slog.Info("Request start", "http_method", "HandleGetFoods", "url", context.Request().RequestURI)
 	data, err := controller.usecase.GetFoodsShop(context)
@@ -66,7 +60,7 @@ func (controller *Controller) HandleGetFoods(context echo.Context) error {
 // @Param id path int true "ID của món ăn"
 // @Produce json
 // @Success 200 {object} int
-// @Router /api/v1/foods/{id} [get]
+// @Router /foods/{id} [get]
 func (controller *Controller) HandleGetFoodById(context echo.Context) error {
 	id, err := strconv.Atoi(context.Param("id"))
 	if err != nil {
@@ -84,14 +78,17 @@ func (controller *Controller) HandleGetFoodById(context echo.Context) error {
 // @Description Tạo món ăn mới
 // @Tags foods
 // @Accept json
-// @Param food body models.Food true "Tạo món ăn thành công"
+// @Param food body domain.Product true "Tạo món ăn thành công"
 // @Produce json
 // @Success 200 {object} int
-// @Router /api/v1/foods [post]
+// @Router /foods [post]
 func (controller *Controller) HandleCreateFood(context echo.Context) error {
-	food := &models.Food{}
-	context.Bind(food)
-	food, err := controller.usecase.AddFood(context, food)
+	food := &domain.Product{}
+	err := context.Bind(food)
+	if err != nil {
+		return err
+	}
+	food, err = controller.usecase.AddFood(context, food)
 	if err != nil {
 		return err
 	}

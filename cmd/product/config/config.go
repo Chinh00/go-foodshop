@@ -2,8 +2,8 @@ package config
 
 import (
 	"github.com/ilyakaznacheev/cleanenv"
-	"go-foodshop/src/infra/database/postgres"
 	configs "go-foodshop/src/pkg/config"
+	"go-foodshop/src/pkg/database"
 	"os"
 )
 
@@ -12,7 +12,7 @@ type (
 		configs.App             `yaml:"app"`
 		configs.HTTP            `yaml:"http"`
 		configs.Log             `yaml:"logger"`
-		postgres.PostgresConfig `yaml:"postgres"`
+		database.PostgresConfig `yaml:"postgres"`
 	}
 )
 
@@ -24,5 +24,6 @@ func NewConfig() (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
+	println(config.PostgresConfig.Username)
 	return config, nil
 }
